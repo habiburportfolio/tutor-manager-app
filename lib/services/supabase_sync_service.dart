@@ -147,27 +147,29 @@ class SupabaseSyncService implements ISyncAdapter {
           .timeout(const Duration(seconds: 15));
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        final List list = jsonDecode(response.body);
-        if (list.isEmpty) {
-          return SyncResult(
-            success: false,
-            message: 'No cloud backups found on Supabase.',
-          );
-        }
+        final dynamic listData = jsonDecode(response.body);
+        if (listData is List) {
+          if (listData.isEmpty) {
+            return SyncResult(
+              success: false,
+              message: 'No cloud backups found on Supabase.',
+            );
+          }
 
-        final latestBackup = list.first;
-        final data = latestBackup['data'] as Map<String, dynamic>?;
+          final latestBackup = listData.first;
+          final data = latestBackup['data'] as Map<String, dynamic>?;
 
-        if (data != null) {
-          await _importJsonToHiveBoxes(data);
-          final now = DateTime.now();
-          await settings.setLastSyncTimestamp(now.toIso8601String());
+          if (data != null) {
+            await _importJsonToHiveBoxes(data);
+            final now = DateTime.now();
+            await settings.setLastSyncTimestamp(now.toIso8601String());
 
-          return SyncResult(
-            success: true,
-            timestamp: now,
-            message: 'Cloud backup successfully restored to local database!',
-          );
+            return SyncResult(
+              success: true,
+              timestamp: now,
+              message: 'Cloud backup successfully restored to local database!',
+            );
+          }
         }
       }
 
