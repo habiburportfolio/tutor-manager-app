@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.tutormanager.app"
+    namespace = "com.tutormanager.flutter_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.tutormanager.app"
+        applicationId = "com.tutormanager.flutter_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
